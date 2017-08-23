@@ -1,0 +1,26 @@
+body {
+  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+}
+
+img {
+  margin: 20px 0;
+  max-width: 40px;
+}
+
+.container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.side-menu {
+  background-color: #eee;
+  border-radius: 10px;
+  padding: 20px;
+  width: 30%;
+}
+
+.issue-view {
+  padding: 20px;
+  width: 70%;
+}

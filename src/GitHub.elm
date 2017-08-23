@@ -1,0 +1,44 @@
+module GitHub exposing (..)
+
+import Http
+import Json.Decode as Decode exposing (Decoder)
+
+
+type alias IssueList =
+    { package : String
+    , issues : List Issue
+    }
+
+
+type alias Issue =
+    { title : String
+    , body : String
+    }
+
+
+type alias Error =
+    Http.Error
+
+
+issueDecoder : Decoder Issue
+issueDecoder =
+    Decode.map2 Issue
+        (Decode.field "title" Decode.string)
+        (Decode.field "body" Decode.string)
+
+
+issueListDecoder : String -> Decoder IssueList
+issueListDecoder package =
+    Decode.list issueDecoder
+        |> Decode.map (IssueList package)
+
+
+toIssueUrl : String -> String
+toIssueUrl package =
+    "https://api.github.com/repos/" ++ package ++ "/issues?labels=meta"
+
+
+getIssues : (Result Http.Error IssueList -> msg) -> String -> Cmd msg
+getIssues toMsg package =
+    Http.get (toIssueUrl package) (issueListDecoder package)
+        |> Http.send toMsg
