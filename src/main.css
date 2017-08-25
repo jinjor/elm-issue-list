@@ -8,16 +8,25 @@ img {
   max-width: 40px;
 }
 
+.container {
+  position: fixed;
+  height: 100%;
+}
+
 .side-menu {
   background-color: #eee;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
 }
 
 .issue-view {
   padding: 20px;
   box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
 }
 
 .close-button {
