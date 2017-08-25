@@ -6,6 +6,7 @@ import GitHub exposing (Issue, IssueList)
 import Markdown
 import Navigation exposing (Location)
 import List.Extra as ListExtra
+import Regex
 
 
 ---- MODEL ----
@@ -187,13 +188,35 @@ viewIssue ( package, issue ) =
                 ]
                 [ text issue.title ]
             ]
-        , Markdown.toHtmlWith markdownOptions [] issue.body
+        , Markdown.toHtmlWith markdownOptions [] (replaceLink package issue.body)
         ]
 
 
 viewError : a -> Html msg
 viewError _ =
     text "error"
+
+
+replaceLink : String -> String -> String
+replaceLink package s =
+    Regex.regex "#[0-9]+"
+        |> (\re ->
+                Regex.replace Regex.All re (.match >> toIssueLink package) s
+           )
+
+
+toIssueLink : String -> String -> String
+toIssueLink package num =
+    String.dropLeft 1 num
+        |> String.toInt
+        |> Result.toMaybe
+        |> Maybe.map (toIssueLinkAnchor package num)
+        |> Maybe.withDefault num
+
+
+toIssueLinkAnchor : String -> String -> Int -> String
+toIssueLinkAnchor package num n =
+    "<a href=" ++ GitHub.toIssueUrl package n ++ " target=_blank>" ++ num ++ "</a>"
 
 
 
