@@ -175,7 +175,7 @@ viewSelectedIssue selectedIssue =
 
 emptyIssue : Html msg
 emptyIssue =
-    div [ class "issue-view" ] []
+    div [ class "issue-view" ] [ text "Select somehting iteresting." ]
 
 
 viewIssue : ( String, Issue ) -> Html msg
