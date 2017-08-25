@@ -55,7 +55,7 @@ init : Location -> ( Model, Cmd Msg )
 init location =
     ( Model [] Nothing []
     , repos
-        |> List.map (GitHub.getIssues Receive)
+        |> List.map (GitHub.getIssues Receive "meta")
         |> Cmd.batch
     )
 
@@ -115,7 +115,7 @@ view model =
         ]
 
 
-findIssue : ( String, String ) -> List IssueList -> Maybe Issue
+findIssue : ( String, String ) -> List IssueList -> Maybe ( String, Issue )
 findIssue ( package, issueTitle ) issueLists =
     issueLists
         |> ListExtra.find (\issueList -> issueList.package == package)
@@ -124,6 +124,7 @@ findIssue ( package, issueTitle ) issueLists =
                 issueList.issues
                     |> ListExtra.find (\issue -> issue.title == issueTitle)
             )
+        |> Maybe.map ((,) package)
 
 
 sideMenu : List IssueList -> Html msg
@@ -137,7 +138,7 @@ viewIssueList issueList =
         [ h2 []
             [ a
                 [ target "_blank"
-                , href ("https://github.com/" ++ issueList.package)
+                , href (GitHub.toRepoUrl issueList.package)
                 ]
                 [ text issueList.package ]
             ]
@@ -163,7 +164,7 @@ markdownOptions =
     }
 
 
-viewSelectedIssue : Maybe Issue -> Html msg
+viewSelectedIssue : Maybe ( String, Issue ) -> Html msg
 viewSelectedIssue selectedIssue =
     selectedIssue
         |> Maybe.map viewIssue
@@ -175,14 +176,14 @@ emptyIssue =
     div [ class "issue-view" ] []
 
 
-viewIssue : Issue -> Html msg
-viewIssue issue =
+viewIssue : ( String, Issue ) -> Html msg
+viewIssue ( package, issue ) =
     div [ class "issue-view show" ]
         [ div [ class "close-button" ] [ a [ href "#" ] [ text "Close" ] ]
         , h1 []
             [ a
                 [ target "_blank"
-                , href ("https://github.com/elm-lang/elm-compiler/issues/" ++ toString issue.number)
+                , href (GitHub.toIssueUrl package issue.number)
                 ]
                 [ text issue.title ]
             ]

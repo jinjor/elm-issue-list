@@ -35,12 +35,22 @@ issueListDecoder package =
         |> Decode.map (IssueList package)
 
 
-toIssueUrl : String -> String
-toIssueUrl package =
-    "https://api.github.com/repos/" ++ package ++ "/issues?labels=meta"
-
-
-getIssues : (Result Http.Error IssueList -> msg) -> String -> Cmd msg
-getIssues toMsg package =
-    Http.get (toIssueUrl package) (issueListDecoder package)
+getIssues : (Result Http.Error IssueList -> msg) -> String -> String -> Cmd msg
+getIssues toMsg label package =
+    Http.get (toIssueQuery package label) (issueListDecoder package)
         |> Http.send toMsg
+
+
+toIssueQuery : String -> String -> String
+toIssueQuery package label =
+    "https://api.github.com/repos/" ++ package ++ "/issues?labels=" ++ label
+
+
+toIssueUrl : String -> Int -> String
+toIssueUrl package issueNumber =
+    "https://github.com/" ++ package ++ "/issues/" ++ toString issueNumber
+
+
+toRepoUrl : String -> String
+toRepoUrl package =
+    "https://github.com/" ++ package
