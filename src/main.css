@@ -8,19 +8,51 @@ img {
   max-width: 40px;
 }
 
-.container {
-  display: flex;
-  align-items: flex-start;
-}
-
 .side-menu {
   background-color: #eee;
   border-radius: 10px;
   padding: 20px;
-  width: 30%;
+  box-sizing: border-box;
 }
 
 .issue-view {
   padding: 20px;
-  width: 70%;
+  box-sizing: border-box;
+}
+
+.close-button {
+  text-align: right;
+}
+
+@media screen and (max-width:599px) {
+  .container {
+    width: 100%;
+  }
+  .issue-view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-x: auto;
+    overflow-x: auto;
+    height: 100%;
+  }
+  .issue-view.show {
+    background-color: #fff;
+  }
+}
+
+@media screen and (min-width:600px) {
+  .container {
+    display: flex;
+    align-items: flex-start;
+  }
+  .side-menu {
+    width: 30%;
+  }
+  .issue-view {
+    width: 70%;
+  }
+  .close-button {
+    display: none;
+  }
 }

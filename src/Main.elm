@@ -20,16 +20,34 @@ type alias Model =
 
 repos : List String
 repos =
-    [ "elm-lang/core"
-    , "elm-lang/html"
-    , "elm-lang/virtual-dom"
-    , "elm-lang/svg"
-    , "elm-lang/http"
+    [ "elm-lang/elm-compiler"
+    , "elm-lang/elm-reactor"
     , "elm-lang/elm-make"
-    , "elm-lang/elm-compiler"
-    , "elm-lang/elm-repl"
-    , "elm-lang/elm-package"
-    , "elm-lang/elm-platform"
+      -- , "elm-lang/elm-package"
+      -- , "elm-lang/elm-repl"
+      -- , "elm-lang/elm-platform"
+    , "elm-lang/error-message-catalog"
+      -- , "elm-lang/elm-lang.org"
+      -- , "elm-lang/package.elm-lang.org"
+      -- , "elm-lang/projects"
+    , "elm-lang/core"
+    , "elm-lang/virtual-dom"
+    , "elm-lang/html"
+      -- , "elm-lang/svg"
+      -- , "elm-lang/http"
+      -- , "elm-lang/browser"
+      -- , "elm-lang/parser-primitives"
+      -- , "elm-lang/url"
+      -- , "elm-lang/docs"
+      -- , "elm-lang/parser"
+      -- , "elm-lang/geolocation"
+      -- , "elm-lang/websocket"
+      -- , "elm-lang/keyboard"
+      -- , "elm-lang/dom"
+      -- , "elm-lang/regexp"
+      -- , "elm-lang/page-visibility"
+      -- , "elm-lang/window"
+      -- , "elm-lang/mouse"
     ]
 
 
@@ -66,15 +84,12 @@ update msg model =
             , Cmd.none
             )
 
-        Navigate (Just ( package, issueTitle )) ->
+        Navigate selectedIssue ->
             ( { model
-                | selectedIssue = Just ( package, issueTitle )
+                | selectedIssue = selectedIssue
               }
             , Cmd.none
             )
-
-        Navigate Nothing ->
-            ( model, Cmd.none )
 
 
 
@@ -119,7 +134,13 @@ sideMenu issueLists =
 viewIssueList : IssueList -> Html msg
 viewIssueList issueList =
     div []
-        [ h2 [] [ text issueList.package ]
+        [ h2 []
+            [ a
+                [ target "_blank"
+                , href ("https://github.com/" ++ issueList.package)
+                ]
+                [ text issueList.package ]
+            ]
         , ul [] (List.map (viewIssueLink issueList.package) issueList.issues)
         ]
 
@@ -156,8 +177,15 @@ emptyIssue =
 
 viewIssue : Issue -> Html msg
 viewIssue issue =
-    div [ class "issue-view" ]
-        [ h1 [] [ text issue.title ]
+    div [ class "issue-view show" ]
+        [ div [ class "close-button" ] [ a [ href "#" ] [ text "Close" ] ]
+        , h1 []
+            [ a
+                [ target "_blank"
+                , href ("https://github.com/elm-lang/elm-compiler/issues/" ++ toString issue.number)
+                ]
+                [ text issue.title ]
+            ]
         , Markdown.toHtmlWith markdownOptions [] issue.body
         ]
 

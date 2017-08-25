@@ -11,7 +11,8 @@ type alias IssueList =
 
 
 type alias Issue =
-    { title : String
+    { number : Int
+    , title : String
     , body : String
     }
 
@@ -22,7 +23,8 @@ type alias Error =
 
 issueDecoder : Decoder Issue
 issueDecoder =
-    Decode.map2 Issue
+    Decode.map3 Issue
+        (Decode.field "number" Decode.int)
         (Decode.field "title" Decode.string)
         (Decode.field "body" Decode.string)
 
