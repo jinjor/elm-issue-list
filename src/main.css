@@ -37,14 +37,16 @@ img {
     width: 100%;
   }
   .issue-view {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     overflow-x: auto;
-    overflow-x: auto;
+    overflow-y: auto;
     height: 100%;
   }
   .issue-view.show {
+    display: block;
     background-color: #fff;
   }
 }

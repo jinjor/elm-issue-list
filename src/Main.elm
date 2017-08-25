@@ -98,11 +98,6 @@ update msg model =
 ---- VIEW ----
 
 
-elmLogo : Html msg
-elmLogo =
-    img [ src "/logo.svg" ] []
-
-
 view : Model -> Html Msg
 view model =
     div [ class "container" ]
