@@ -7,6 +7,7 @@ import Markdown
 import Navigation exposing (Location)
 import List.Extra as ListExtra
 import Regex
+import UrlParser exposing (Parser, (</>))
 
 
 ---- MODEL ----
@@ -14,7 +15,7 @@ import Regex
 
 type alias Model =
     { issueLists : List IssueList
-    , selectedIssue : Maybe ( String, String )
+    , selectedIssue : Maybe ( String, Int )
     , errors : List String
     }
 
@@ -67,7 +68,7 @@ init location =
 
 type Msg
     = Receive (Result GitHub.Error IssueList)
-    | Navigate (Maybe ( String, String ))
+    | Navigate (Maybe ( String, Int ))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -116,14 +117,14 @@ view model =
         ]
 
 
-findIssue : ( String, String ) -> List IssueList -> Maybe ( String, Issue )
-findIssue ( package, issueTitle ) issueLists =
+findIssue : ( String, Int ) -> List IssueList -> Maybe ( String, Issue )
+findIssue ( package, issueNumber ) issueLists =
     issueLists
         |> ListExtra.find (\issueList -> issueList.package == package)
         |> Maybe.andThen
             (\issueList ->
                 issueList.issues
-                    |> ListExtra.find (\issue -> issue.title == issueTitle)
+                    |> ListExtra.find (\issue -> issue.number == issueNumber)
             )
         |> Maybe.map ((,) package)
 
@@ -151,7 +152,7 @@ viewIssueLink : String -> Issue -> Html msg
 viewIssueLink package issue =
     let
         url =
-            "#" ++ package ++ "/" ++ issue.title
+            "#" ++ package ++ "/" ++ toString issue.number
     in
         li [] [ a [ href url ] [ text issue.title ] ]
 
@@ -225,17 +226,17 @@ toIssueLinkAnchor package num n =
 
 locationToMsg : Location -> Msg
 locationToMsg location =
-    let
-        list =
-            String.dropLeft 1 location.hash
-                |> String.split "/"
-    in
-        case list of
-            owner :: repo :: issueTitle :: _ ->
-                Navigate (Just ( owner ++ "/" ++ repo, issueTitle ))
+    UrlParser.parseHash parser location
+        |> Navigate
 
-            _ ->
-                Navigate Nothing
+
+parser : Parser (( String, Int ) -> a) a
+parser =
+    UrlParser.map
+        (\owner repo issueNumber ->
+            ( owner ++ "/" ++ repo, issueNumber )
+        )
+        (UrlParser.string </> UrlParser.string </> UrlParser.int)
 
 
 main : Program Never Model Msg

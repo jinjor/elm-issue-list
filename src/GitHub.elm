@@ -48,7 +48,7 @@ toIssueQuery package label =
 
 toIssueUrl : String -> Int -> String
 toIssueUrl package issueNumber =
-    "https://github.com/" ++ package ++ "/issues/" ++ toString issueNumber
+    toRepoUrl package ++ "/issues/" ++ toString issueNumber
 
 
 toRepoUrl : String -> String
