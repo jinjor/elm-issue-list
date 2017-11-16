@@ -1,13 +1,13 @@
 module Main exposing (..)
 
+import GitHub exposing (Issue, IssueList)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import GitHub exposing (Issue, IssueList)
+import List.Extra as ListExtra
 import Markdown
 import Navigation exposing (Location)
-import List.Extra as ListExtra
 import Regex
-import UrlParser exposing (Parser, (</>))
+import UrlParser exposing ((</>), Parser)
 
 
 ---- MODEL ----
@@ -25,31 +25,34 @@ repos =
     [ "elm-lang/elm-compiler"
     , "elm-lang/elm-reactor"
     , "elm-lang/elm-make"
-      -- , "elm-lang/elm-package"
-      -- , "elm-lang/elm-repl"
-      -- , "elm-lang/elm-platform"
+
+    -- , "elm-lang/elm-package"
+    -- , "elm-lang/elm-repl"
+    -- , "elm-lang/elm-platform"
     , "elm-lang/error-message-catalog"
-      -- , "elm-lang/elm-lang.org"
-      -- , "elm-lang/package.elm-lang.org"
-      -- , "elm-lang/projects"
+
+    -- , "elm-lang/elm-lang.org"
+    -- , "elm-lang/package.elm-lang.org"
+    -- , "elm-lang/projects"
     , "elm-lang/core"
     , "elm-lang/virtual-dom"
     , "elm-lang/html"
-      -- , "elm-lang/svg"
-      -- , "elm-lang/http"
-      -- , "elm-lang/browser"
-      -- , "elm-lang/parser-primitives"
-      -- , "elm-lang/url"
-      -- , "elm-lang/docs"
-      -- , "elm-lang/parser"
-      -- , "elm-lang/geolocation"
-      -- , "elm-lang/websocket"
-      -- , "elm-lang/keyboard"
-      -- , "elm-lang/dom"
-      -- , "elm-lang/regexp"
-      -- , "elm-lang/page-visibility"
-      -- , "elm-lang/window"
-      -- , "elm-lang/mouse"
+
+    -- , "elm-lang/svg"
+    -- , "elm-lang/http"
+    -- , "elm-lang/browser"
+    -- , "elm-lang/parser-primitives"
+    -- , "elm-lang/url"
+    -- , "elm-lang/docs"
+    -- , "elm-lang/parser"
+    -- , "elm-lang/geolocation"
+    -- , "elm-lang/websocket"
+    -- , "elm-lang/keyboard"
+    -- , "elm-lang/dom"
+    -- , "elm-lang/regexp"
+    -- , "elm-lang/page-visibility"
+    -- , "elm-lang/window"
+    -- , "elm-lang/mouse"
     ]
 
 
@@ -149,7 +152,7 @@ viewIssueLink package issue =
         url =
             "#" ++ package ++ "/" ++ toString issue.number
     in
-        li [] [ a [ href url ] [ text issue.title ] ]
+    li [] [ a [ href url ] [ text issue.title ] ]
 
 
 markdownOptions : Markdown.Options
