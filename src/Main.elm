@@ -103,7 +103,25 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "container" ]
+    div [ class "view" ]
+        [ header
+        , mainContent model
+        ]
+
+
+header : Html msg
+header =
+    nav [ class "navbar is-dark" ]
+        [ div [ class "navbar-brand" ]
+            [ a [ class "navbar-item title is-5" ]
+                [ text "Elm Meta Issues" ]
+            ]
+        ]
+
+
+mainContent : Model -> Html Msg
+mainContent model =
+    div [ class "columns" ]
         [ sideMenu model.issueLists
         , viewSelectedIssue
             (model.selectedIssue
@@ -129,21 +147,20 @@ findIssue ( package, issueNumber ) issueLists =
 
 sideMenu : List IssueList -> Html msg
 sideMenu issueLists =
-    div [ class "side-menu" ] (List.map viewIssueList issueLists)
+    div [ class "column is-one-third menu section side-menu" ] (List.concatMap viewIssueList issueLists)
 
 
-viewIssueList : IssueList -> Html msg
+viewIssueList : IssueList -> List (Html msg)
 viewIssueList issueList =
-    div []
-        [ h2 []
-            [ a
-                [ target "_blank"
-                , href (GitHub.toRepoUrl issueList.package)
-                ]
-                [ text issueList.package ]
+    [ h2 [ class "menu-label" ]
+        [ a
+            [ target "_blank"
+            , href (GitHub.toRepoUrl issueList.package)
             ]
-        , ul [] (List.map (viewIssueLink issueList.package) issueList.issues)
+            [ text issueList.package ]
         ]
+    , ul [ class "menu-list" ] (List.map (viewIssueLink issueList.package) issueList.issues)
+    ]
 
 
 viewIssueLink : String -> Issue -> Html msg
@@ -173,14 +190,15 @@ viewSelectedIssue selectedIssue =
 
 emptyIssue : Html msg
 emptyIssue =
-    div [ class "issue-view" ] [ text "Select somehting iteresting." ]
+    div [ class "section issue-view is-hidden-mobile" ]
+        [ text "Select something interesting." ]
 
 
 viewIssue : ( String, Issue ) -> Html msg
 viewIssue ( package, issue ) =
-    div [ class "issue-view show" ]
-        [ div [ class "close-button" ] [ a [ href "#" ] [ text "Close" ] ]
-        , h1 []
+    div [ class "section issue-view" ]
+        [ a [ href "#", class "delete is-right is-hidden-tablet" ] []
+        , h1 [ class "title is-4" ]
             [ a
                 [ target "_blank"
                 , href (GitHub.toIssueUrl package issue.number)
