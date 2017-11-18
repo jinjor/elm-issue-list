@@ -121,8 +121,10 @@ header =
 
 mainContent : Model -> Html Msg
 mainContent model =
-    div [ class "columns" ]
-        [ sideMenu model.issueLists
+    div
+        [ class "is-flex-tablet"
+        ]
+        [ sideMenu (model.selectedIssue /= Nothing) model.issueLists
         , viewSelectedIssue
             (model.selectedIssue
                 |> Maybe.andThen
@@ -145,9 +147,20 @@ findIssue ( package, issueNumber ) issueLists =
         |> Maybe.map ((,) package)
 
 
-sideMenu : List IssueList -> Html msg
-sideMenu issueLists =
-    div [ class "column is-one-third menu section side-menu" ] (List.concatMap viewIssueList issueLists)
+sideMenu : Bool -> List IssueList -> Html msg
+sideMenu somethingIsSelected issueLists =
+    let
+        hiddenClass =
+            if somethingIsSelected then
+                "is-hidden-mobile"
+            else
+                ""
+    in
+    div
+        [ class "column is-4 menu section side-menu"
+        , class hiddenClass
+        ]
+        (List.concatMap viewIssueList issueLists)
 
 
 viewIssueList : IssueList -> List (Html msg)
@@ -196,8 +209,8 @@ emptyIssue =
 
 viewIssue : ( String, Issue ) -> Html msg
 viewIssue ( package, issue ) =
-    div [ class "section issue-view" ]
-        [ a [ href "#", class "delete is-right is-hidden-tablet" ] []
+    div [ class "section issue-view is-8 is-offset-4" ]
+        [ a [ href "#", class "delete is-pulled-right is-hidden-tablet" ] []
         , h1 [ class "title is-4" ]
             [ a
                 [ target "_blank"
