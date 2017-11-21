@@ -1,14 +1,17 @@
-# Distribution
+# build
 build/
 
-# elm-package generated files
+# elm
 elm-stuff
-
-# elm-repl generated files
 repl-temp-*
 
-# Dependency directories
+# node
 node_modules
+package-lock.json
 
-# Desktop Services Store on macOS
+# mac
 .DS_Store
+
+# bulma
+.sass-cache
+public/bulma*

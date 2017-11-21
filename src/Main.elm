@@ -122,7 +122,7 @@ header =
 mainContent : Model -> Html Msg
 mainContent model =
     div
-        [ class "is-flex-tablet main-content"
+        [ class "is-flex-tablet main-content columns"
         ]
         [ sideMenu (model.selectedIssue /= Nothing) model.issueLists
         , viewSelectedIssue
@@ -195,13 +195,13 @@ viewSelectedIssue selectedIssue =
 
 emptyIssue : Html msg
 emptyIssue =
-    div [ class "section issue-view is-8 is-hidden-mobile" ]
+    div [ class "section issue-view column is-8 is-hidden-mobile" ]
         [ text "Select something interesting." ]
 
 
 viewIssue : ( String, Issue ) -> Html msg
 viewIssue ( package, issue ) =
-    div [ class "section issue-view is-8 is-white" ]
+    div [ class "section issue-view column is-8 is-white" ]
         [ a [ href "#", class "delete is-pulled-right is-hidden-tablet" ] []
         , h1 [ class "title is-4" ]
             [ a
