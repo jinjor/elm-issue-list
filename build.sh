@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# sass --style compressed src/bulma-custom.sass src/generated/bulma-custom.css &&
-# npm run build &&
-# rm -rf ./docs &&
-# mv build docs &&
-# sed -i '' -e 's/\"\//\"\.\//g' docs/index.html
-
 mkdir src/generated 2>/dev/null
+
+set -e
+
 docker-compose run sass
 docker-compose run yarn build
+sed -i '' -e 's/\"\//\"\.\//g' docs/index.html

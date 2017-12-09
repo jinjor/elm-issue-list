@@ -3,8 +3,7 @@ MAINTAINER Yosuke Torii jinjorweb@gmail.com
 
 RUN useradd --user-group --create-home --shell /bin/false app &&\
     yarn global add elm &&\
-    yarn global add elm-test &&\
-    yarn global add elm-live
+    yarn global add elm-test
 
 ENV HOME=/home/app
 
