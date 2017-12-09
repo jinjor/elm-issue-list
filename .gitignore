@@ -14,7 +14,7 @@ package-lock.json
 
 # bulma
 .sass-cache
-public/bulma*
+src/generated
 
 # work
 work/
