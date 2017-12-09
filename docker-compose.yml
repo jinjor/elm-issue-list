@@ -1,0 +1,22 @@
+version: "3"
+services:
+  sass:
+    build:
+      context: .
+      dockerfile: Dockerfile-sass
+    container_name: sass
+    command: --style compressed src/bulma-custom.sass src/generated/bulma-custom.css
+    volumes:
+      - $PWD/src:/home/app/src
+      - $PWD/node_modules:/home/app/node_modules
+
+  yarn:
+    build: .
+    container_name: yarn
+    command: start
+    volumes:
+      - $PWD/src:/home/app/src
+      - $PWD/docs:/home/app/build
+      - $PWD/scripts:/home/app/scripts
+      - $PWD/config:/home/app/config
+      - $PWD/public:/home/app/public
